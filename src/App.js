@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import { Route } from 'react-router-dom';
+import * as BlogAPI from './BlogAPI.js';
 import './App.css';
 
+
 class App extends Component {
-  render() {
+    componentDidMount(){
+        BlogAPI.getAllPosts().then((posts)=>{
+            console.log(posts);
+        })
+    }
+    render() {
     return (
       <div className="App">
         <header className="App-header">
@@ -15,7 +23,7 @@ class App extends Component {
         </p>
       </div>
     );
-  }
+    }
 }
 
 export default App;
