@@ -9,6 +9,9 @@ class App extends Component {
     componentDidMount(){
         BlogAPI.getAllPosts().then((posts)=>{
             console.log(posts);
+        });
+        BlogAPI.getAllCategories().then((category)=>{
+            console.log(category);
         })
     }
     render() {
