@@ -24,9 +24,9 @@ class App extends Component {
     return (
       <div className="App">
           <h1 className="App-title">Blog</h1>
-          <PostList
+          (<PostList
               posts = {this.state.testPost}
-          />
+          />)
 
       </div>
     );
