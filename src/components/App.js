@@ -43,15 +43,17 @@ class App extends Component {
 
 function mapStateToProps({post,category}){
     let mixReturn = {}
+    console.log('mixReturn is', mixReturn)
+    console.log(post)
     if (category.length> 0){
             category.map((item)=>{
                 mixReturn[item.name] = {
-                    'posts': post,
+                    'posts': Object.values(post).filter( obj => obj.category === item.name).reduce((acc,cur)=> {acc[cur.id] = cur; return acc},{}),
                     'path': item.path
                 }
             })
     }
-    return {}
+    return {mixReturn}
 }
 
 function mapDispatchToProps (dispatch) {

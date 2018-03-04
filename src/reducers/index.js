@@ -17,7 +17,6 @@ function post (state = initialPostState, action) {
             let arrReturn = {}
             if (!data) return state
             arrReturn = has.mapKeys(data, (item)=>item.id)
-            console.log('123',arrReturn)
             return arrReturn
         default :
             return state
