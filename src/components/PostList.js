@@ -1,7 +1,7 @@
 import React from 'react'
 
 function post(item) {
-    return (<li>
+    return (<li key={item.id}>
     <div>{item.title}</div>
     <div>{item.author}</div>
     <div>{item.commentCount}</div>
@@ -9,18 +9,23 @@ function post(item) {
  </li>)
 }
 
-export default function PostList ({ posts }) {
+export default function PostList ({post,category}) {
 
-    if (!posts || posts.length === 0) {
-        return <p>Your search has 0 results.</p>
-    }
+    console.log('post is ',post)
+    console.log('category is ',category)
 
+    // return ( <div className="List">
+    //         {category.map((categoryName)=>{
+    //             <div className={categoryName.name}><ul className='react'>
+    //                 { post[categoryName.name].map((item)=>{
+    //                     post(item)
+    //                 })
+    //                 }
+    //             </ul></div>
+    //         })}
+    //         </div>)
     return (
-        (<ul className='food-list'>
-            {posts.map((item) => (
-                post(item)
-            ))}
-
-        </ul>)
+        <div/>
     )
+
 }
