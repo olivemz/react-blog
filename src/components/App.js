@@ -28,13 +28,12 @@ class App extends Component {
 
     render() {
         console.log(this)
-        const {post,category,comment} = this.props
+        const {mixPost} = this.props
     return (
       <div className="App">
           <h1 className="App-title">Blog</h1>
           <PostList
-              post= {post}
-              category= {category}
+              post= {mixPost}
           />
       </div>
     );
@@ -42,18 +41,18 @@ class App extends Component {
 }
 
 function mapStateToProps({post,category}){
-    let mixReturn = {}
+    let mixPost = {}
     console.log('mixReturn is', mixReturn)
     console.log(post)
     if (category.length> 0){
             category.map((item)=>{
-                mixReturn[item.name] = {
+                mixPost[item.name] = {
                     'posts': Object.values(post).filter( obj => obj.category === item.name).reduce((acc,cur)=> {acc[cur.id] = cur; return acc},{}),
                     'path': item.path
                 }
             })
     }
-    return {mixReturn}
+    return {mixPost}
 }
 
 function mapDispatchToProps (dispatch) {

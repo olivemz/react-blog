@@ -9,10 +9,9 @@ function post(item) {
  </li>)
 }
 
-export default function PostList ({post,category}) {
+export default function PostList ({mixPost}) {
 
-    console.log('post is ',post)
-    console.log('category is ',category)
+    console.log('mixPost is ',mixPost)
 
     // return ( <div className="List">
     //         {category.map((categoryName)=>{
