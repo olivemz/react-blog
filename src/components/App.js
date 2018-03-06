@@ -42,7 +42,6 @@ class App extends Component {
 
 function mapStateToProps({post,category}){
     let mixPost = {}
-    console.log('mixReturn is', mixReturn)
     console.log(post)
     if (category.length> 0){
             category.map((item)=>{
