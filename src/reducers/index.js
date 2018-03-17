@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import has from 'lodash'
 
 import {
-    GET_ALL_POSTS,GET_ALL_CATEGORIES,GET_COMMENT
+    GET_ALL_POSTS,GET_ALL_CATEGORIES,GET_COMMENT,UPDATE_POST
 } from '../actions'
 
 const initialPostState = {}
@@ -10,13 +10,17 @@ const initialCommentState = {}
 const initialCategoryState = []
 
 function post (state = initialPostState, action) {
-
+    let arrReturn = {};
     switch (action.type) {
         case GET_ALL_POSTS :
             const {data} = action
-            let arrReturn = {}
             if (!data) return state
             arrReturn = has.mapKeys(data, (item)=>item.id)
+            return arrReturn
+        case UPDATE_POST:
+            const {postId,postDetail} = action
+            arrReturn = action.data
+            if (postId in arrReturn) arrReturn[postId] = postDetail
             return arrReturn
         default :
             return state
