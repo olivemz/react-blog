@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { getPosts,getCategories} from '../actions'
+import {getPosts, getCategories, getPostDetail, getComment} from '../actions'
 import logo from '../logo.svg';
 import { Route } from 'react-router-dom';
 import * as BlogAPI from '../BlogAPI.js';
@@ -12,6 +12,7 @@ class App extends Component {
         testPost: null
     }
     componentDidMount(){
+        // In this api, body shall not be added, I will assume this.
         BlogAPI.getAllPosts().then((posts)=>{
             this.props.getAllPosts(posts);
             console.log(posts);
@@ -20,21 +21,20 @@ class App extends Component {
         BlogAPI.getAllCategories().then((categories)=>{
             this.props.getAllCategory(categories);
             console.log(categories);
-        })
-        BlogAPI.getCategoryPosts('udacity').then((categories)=>{
-            console.log(categories);
-        })
+        });
     }
 
     render() {
-        console.log(this)
+        console.log("*******",this);
         const {mixPost} = this.props
     return (
       <div className="App">
           <h1 className="App-title">Blog</h1>
           <PostList
               post= {mixPost}
-          />
+              getComment= {this.props.getComment}
+              getPostDetail= {this.props.getPostDetail}
+      />
       </div>
     );
     }
@@ -42,7 +42,6 @@ class App extends Component {
 
 function mapStateToProps({post,category}){
     let mixPost = {}
-    console.log(post)
     if (category.length> 0){
             category.map((item)=>{
                 mixPost[item.name] = {
@@ -58,6 +57,8 @@ function mapDispatchToProps (dispatch) {
     return {
         getAllPosts: (data) => dispatch(getPosts(data)),
         getAllCategory: (data) => dispatch(getCategories(data)),
+        getPostDetail: (postId,postDetail) => dispatch(getPostDetail({postId,postDetail})),
+        getComment: (comments) => dispatch(getComment(comments)),
     }
 }
 

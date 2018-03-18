@@ -1,74 +1,60 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PostDetail from './PostDetail';
 import * as BlogAPI from "../BlogAPI";
 import {connect} from "react-redux";
-import { getComment,getPostDetail} from '../actions'
+import {getCategories, getComment, getPostDetail, getPosts} from '../actions'
+import PropTypes from 'prop-types'
 
 
-function post(item) {
-    return (<li key={item.id}>
-    <p>{item.title}</p>
-    <p>{item.author}</p>
-    <p>{item.commentCount}</p>
-    <p>{item.voteScore}</p>
-    <button
-        className='page_detail'
-        onClick={detailPage(item.id)}>
-        view detail
-    </button>
- </li>)
-}
+class PostList extends Component{
 
-function detailPage(postId){
-    BlogAPI.getPost(postId).then((posts)=>{
-        this.props.getAllPosts(posts);
-        console.log(posts);
-    });
-}
+    state={1:1,2:2,3:3}
 
-export function PostList (mixPost) {
+    static propType = {
+        detailPage: PropTypes.array.isRequired,
+    }
 
-    console.log('mixPost is ',mixPost)
+    detailPage = (postId) => {
+        console.log("this postId is", postId);
+        BlogAPI.getPost(postId).then((posts)=>{
+           // this.props.getPostDetail(this.props.post,postId,posts);
+            console.log('123123',posts);
+        });
+    }
 
-    return ( <div className="List">
+    post = (item) => {
+        return (<li key={item.id}>
+            <p>{item.title}</p>
+            <p>{item.author}</p>
+            <p>{item.commentCount}</p>
+            <p>{item.voteScore}</p>
+            <button
+                className='page_detail'
+                onClick={() => this.detailPage(item.id)}>
+                view detail
+            </button>
+        </li>)
+    }
+
+
+    render () {
+        let mixPost = {};
+        mixPost = this.props
+        console.log('----------------',mixPost)
+        return ( <div className="List">
             {('post' in mixPost) && Object.values(mixPost['post']).map(obj => {
-                console.log('obj is', obj);
-                if ('posts' in obj && 'path' in obj)
-                return (<div key={obj.path}><ul className={obj.path}>
-                    { Object.values(obj.posts).map((postItem)=>{
-                        console.log('postItem', postItem);
-                        return post(postItem)
-                    })
-                    }
-                </ul></div>)
+                    if ('posts' in obj && 'path' in obj)
+                        return (<div key={obj.path}><ul className={obj.path}>
+                            { Object.values(obj.posts).map((postItem)=>{
+                                return this.post(postItem)
+                            })
+                            }
+                        </ul></div>)
                 }
             )}
-            </div>)
+        </div>)
 
-}
-
-function mapStateToProps({post,category}){
-    let mixPost = {}
-    console.log(post)
-    if (category.length> 0){
-        category.map((item)=>{
-            mixPost[item.name] = {
-                'posts': Object.values(post).filter( obj => obj.category === item.name).reduce((acc,cur)=> {acc[cur.id] = cur; return acc},{}),
-                'path': item.path
-            }
-        })
-    }
-    return {mixPost}
-}
-
-function mapDispatchToProps (dispatch) {
-    return {
-        getPostDetail: (data,postId,postDetail) => dispatch(getPostDetail({data,postId,postDetail})),
-        getComment: (data) => dispatch(getComment(data)),
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PostDetail);
+export default PostList

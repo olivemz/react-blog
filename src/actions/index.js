@@ -1,6 +1,6 @@
 export const GET_ALL_POSTS = 'GET_ALL_POSTS'
 export const GET_ALL_CATEGORIES = 'GET_ALL_CATEGORIES'
-export const GET_COMMENT = 'GET_COMMENT'
+export const GET_ALL_COMMENT = 'GET_COMMENT'
 export const UPDATE_POST = 'UPDATE_POST'
 
 export function getPosts (data) {
@@ -17,17 +17,17 @@ export function getCategories (data) {
     }
 }
 
-export function getComment (data) {
+export function getComment (data, comments) {
     return {
-        type: GET_COMMENT,
+        type: GET_ALL_COMMENT,
         data,
+        comments
     }
 }
 
-export function getPostDetail ({data, postId, postDetail}) {
+export function getPostDetail ({ postId, postDetail}) {
     return {
         type: UPDATE_POST,
-        data,
         postId,
         postDetail
     }
