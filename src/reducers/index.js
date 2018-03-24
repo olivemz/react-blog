@@ -46,6 +46,7 @@ function comment (state = initialCommentState, action) {
     let arrReturn = state;
     switch (action.type) {
         case GET_ALL_COMMENT :
+            arrReturn = []
             const {comments} = action
             arrReturn = has.mapKeys(comments, (comments)=>comments.id)
             return arrReturn

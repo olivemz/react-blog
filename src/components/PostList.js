@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import PostDetail from './PostDetail';
 import * as BlogAPI from "../BlogAPI";
-import {connect} from "react-redux";
 import {getCategories, getComment, getPostDetail, getPosts} from '../actions'
 import PropTypes from 'prop-types'
-
+import {BrowserRouter as Router, Route } from 'react-router-dom'
 
 class PostList extends Component{
 
@@ -14,12 +13,14 @@ class PostList extends Component{
         detailPage: PropTypes.array.isRequired,
     }
 
-    detailPage = (postId) => {
-        console.log("this postId is", postId);
-        BlogAPI.getPost(postId).then((posts)=>{
-           // this.props.getPostDetail(this.props.post,postId,posts);
-            console.log('123123',posts);
-        });
+    detailPage = (post) => {
+        console.log("this postId is", "/" + post.category+"/"+ post.id);
+        <Route exact path={ "/" + post.category+"/"+ post.id} render={(history) => (
+            <PostDetail
+            postId = {post.id}
+            />
+       )}
+        />
     }
 
     post = (item) => {
@@ -30,7 +31,7 @@ class PostList extends Component{
             <p>{item.voteScore}</p>
             <button
                 className='page_detail'
-                onClick={() => this.detailPage(item.id)}>
+                onClick={() => this.detailPage(item)}>
                 view detail
             </button>
         </li>)

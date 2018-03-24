@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {getPosts, getCategories, getPostDetail, getComment} from '../actions'
 import logo from '../logo.svg';
-import { Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import * as BlogAPI from '../BlogAPI.js';
 import './App.css';
 import PostList from './PostList';
@@ -30,11 +30,13 @@ class App extends Component {
     return (
       <div className="App">
           <h1 className="App-title">Blog</h1>
+          <Route exact path='/' render={() => (
           <PostList
               post= {mixPost}
               getComment= {this.props.getComment}
               getPostDetail= {this.props.getPostDetail}
-      />
+              />
+              )}/>
       </div>
     );
     }
