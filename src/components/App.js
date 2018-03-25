@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {getPosts, getCategories, getPostDetail, getComment} from '../actions'
 import logo from '../logo.svg';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route , withRouter } from 'react-router-dom';
 import * as BlogAPI from '../BlogAPI.js';
 import './App.css';
 import PostList from './PostList';
+import PostDetail from './PostDetail';
 
 class App extends Component {
     state = {
@@ -37,6 +38,11 @@ class App extends Component {
               getPostDetail= {this.props.getPostDetail}
               />
               )}/>
+          <Route exact path='/:category/:postId'
+         render={() => (
+             <PostDetail
+             />)}
+          />
       </div>
     );
     }
@@ -64,7 +70,7 @@ function mapDispatchToProps (dispatch) {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(App);
+)(App));

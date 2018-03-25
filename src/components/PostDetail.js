@@ -1,36 +1,47 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import {BrowserRouter as Router, Route } from 'react-router-dom'
+import {BrowserRouter as Router, Route , withRouter} from 'react-router-dom'
 import {getCategories, getComment, getPostDetail, getPosts} from "../actions";
 import * as BlogAPI from "../BlogAPI";
 
 
 class PostDetail extends Component{
-
+    state = {
+        thisPost: ''
+    }
     componentDidMount(){
+        const url = this.props.location.pathname
+        let postId, category = ''
+        let arrVariable = url.split("/")
+        if (arrVariable.length == 3){
+            category = arrVariable[1]
+            postId = arrVariable[2]
+        }
+        console.log("this.pros",this.props)
         // Get detail page.
-        BlogAPI.getPost(this.props.postId).then((posts)=>{
+        BlogAPI.getPost(postId).then((posts)=>{
             console.log('123123',posts);
-            this.props.getPostDetail(this.props.postId, posts)
+            this.props.getPostDetail(postId, posts);
+            this.setState({
+                thisPost:this.props.mixPost.post[postId]
+            })
         });
 
-        BlogAPI.getPostComment(this.props.postId).then((comments)=>{
+        BlogAPI.getPostComment(postId).then((comments)=>{
             console.log(comments);
             this.props.getComment(comments);
         });
     }
 
     render(){
-        const {postId, posts, comments} = this.props
-        const detailPost = posts[postId]
         return (
             <div className="detail">
-                    return (<div key={postId}>
-                    <h1>{detailPost.title}</h1>
-                    <p>{detailPost.author}</p>
-                    <p>{detailPost.body}</p>
-                    <p>{detailPost.commentCount}</p>
-                    <p>{detailPost.voteScore}</p>
+                   <div key={this.state.thisPost.id}>
+                    <h1>{this.state.thisPost.title}</h1>
+                    <p>{this.state.thisPost.author}</p>
+                    <p>{this.state.thisPost.body}</p>
+                    <p>{this.state.thisPost.commentCount}</p>
+                    <p>{this.state.thisPost.voteScore}</p>
                 </div>
             </div>
         )
@@ -53,8 +64,8 @@ function mapDispatchToProps (dispatch) {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(PostDetail);
+)(PostDetail));
 
