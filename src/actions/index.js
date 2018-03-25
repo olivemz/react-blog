@@ -36,10 +36,11 @@ export function getComment ({comments}) {
     }
 }
 
-export function upsertComment ({ comment}) {
+export function upsertComment ({commentId, comment}) {
     return {
         type: UPSERT_ONE_COMMENT,
-        comment,
+        commentId,
+        comment
     }
 }
 

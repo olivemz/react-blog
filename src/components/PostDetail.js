@@ -16,7 +16,8 @@ class PostDetail extends Component{
         editComment: {},
         editPost: {},
         commentModalOpen: false,
-        postModalOpen: false
+        postModalOpen: false,
+        blnNewComment: false,
     }
 
     componentDidMount(){
@@ -37,6 +38,18 @@ class PostDetail extends Component{
 
     setCommentState(comment){
         this.setState(()=>({editComment: comment, commentModalOpen: true}))
+    }
+
+    addNewComment(){
+        // generate new comment id and time stamp.
+        let newComment = {
+            id: Math.floor(Date.now()),
+            parentId: this.state.thisPostId,
+            timestamp: Math.floor(Date.now()),
+            body: '',
+            author: '',
+        }
+        this.setState(()=>({editComment:newComment, commentModalOpen: true, blnNewComment:true}))
     }
 
     comment = (comment) =>{
@@ -61,11 +74,25 @@ class PostDetail extends Component{
     }
 
     submitComment = () => {
-        this.setState(()=>({commentModalOpen: false}))
+        const {editComment,blnNewComment} = this.state
+
+        if(!blnNewComment){
+            BlogAPI.editComment(editComment.id).then((comment) => {
+                console.log(comment);
+                this.props.upsertComment(comment.id, comment)
+            });
+        }
+        else{
+            console.log(editComment);
+            BlogAPI.createComent(editComment).then((comment) => {
+                console.log('added new comment', comment);
+                this.props.upsertComment(comment.id, comment)
+            });
+        }
+        this.setState(()=>({commentModalOpen: false, blnNewComment: false}))
     }
 
     render(){
-        console.log("+++++++++",this);
         const {thisPostId, editComment, editPost, commentModalOpen, postModalOpen} = this.state
         let thisPost = this.props.mixPost.posts[thisPostId]
         let thisComments = Object.values(this.props.mixPost.comments).filter(comment => (comment.parentId === this.state.thisPostId))
@@ -81,6 +108,11 @@ class PostDetail extends Component{
                     <p>{thisPost.voteScore}</p>
                        <div className="comments"><ul>
                            <h2>Comments</h2>
+                           <button
+                               className='icon-btn'
+                               onClick={() => this.addNewComment()}>
+                               Add New Comment
+                           </button>
                            {thisComments && thisComments.map((comment)=>{
                                return this.comment(comment)
                            })}
@@ -115,16 +147,6 @@ class PostDetail extends Component{
                                 placeholder='Add Comment'
                                 value={('body' in this.state.editComment) ? this.state.editComment['body'] : ''}
                                 onChange={this.handleCommentChange.bind(this, "body")}
-                            />
-                        </label>
-                        <label>
-                            score:
-                            <input
-                                className='input'
-                                type='text'
-                                placeholder='Add score'
-                                value={('voteScore' in this.state.editComment) ? this.state.editComment['voteScore'] : ''}
-                                onChange={this.handleCommentChange.bind(this, "voteScore")}
                             />
                         </label>
                         <button

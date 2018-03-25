@@ -50,11 +50,10 @@ function comment (state = initialCommentState, action) {
         case GET_ALL_COMMENT :
             var {comments} = action
             arrReturn = has.mapKeys(comments, (comment)=>comment.id)
-            console.log("arrReturn is ++++", arrReturn)
             return arrReturn
         case UPSERT_ONE_COMMENT:
-            var {comment} = action
-            ('id' in comment) && (arrReturn[comment.id] = comment)
+            var {commentId, comment} = action
+            arrReturn[commentId] = comment
             return arrReturn
         case DELETE_ONE_COMMENT:
             var {commentId} = action
