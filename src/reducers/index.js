@@ -2,7 +2,12 @@ import { combineReducers } from 'redux'
 import has from 'lodash'
 
 import {
-    GET_ALL_POSTS,GET_ALL_CATEGORIES,GET_ALL_COMMENT,UPDATE_POST
+    GET_ALL_POSTS,
+    GET_ALL_CATEGORIES,
+    GET_ALL_COMMENT,
+    UPDATE_POST,
+    UPSERT_ONE_COMMENT,
+    DELETE_ONE_COMMENT
 } from '../actions'
 
 const initialPostState = {}
@@ -13,12 +18,12 @@ function post (state = initialPostState, action) {
     let arrReturn = {};
     switch (action.type) {
         case GET_ALL_POSTS :
-            const {data} = action
+            var {data} = action
             if (!data) return state
             arrReturn = has.mapKeys(data, (item)=>item.id)
             return arrReturn
         case UPDATE_POST:
-            const {postId,postDetail} = action
+            var {postId,postDetail} = action
             arrReturn = state
             arrReturn[postId] = postDetail
             return arrReturn
@@ -43,10 +48,17 @@ function comment (state = initialCommentState, action) {
     let arrReturn = state;
     switch (action.type) {
         case GET_ALL_COMMENT :
-            arrReturn = []
-            const {comments} = action
+            var {comments} = action
             arrReturn = has.mapKeys(comments, (comment)=>comment.id)
             console.log("arrReturn is ++++", arrReturn)
+            return arrReturn
+        case UPSERT_ONE_COMMENT:
+            var {comment} = action
+            ('id' in comment) && (arrReturn[comment.id] = comment)
+            return arrReturn
+        case DELETE_ONE_COMMENT:
+            var {commentId} = action
+            (commentId in arrReturn) && delete arrReturn[commentId]
             return arrReturn
         default :
             return state
