@@ -7,42 +7,57 @@ import * as BlogAPI from "../BlogAPI";
 
 class PostDetail extends Component{
     state = {
-        thisPost: ''
+        thisPostId: ''
     }
+
     componentDidMount(){
-        const url = this.props.location.pathname
-        let postId, category = ''
-        let arrVariable = url.split("/")
-        if (arrVariable.length == 3){
-            category = arrVariable[1]
-            postId = arrVariable[2]
-        }
+        const {postId, category} = this.props.match.params
         console.log("this.pros",this.props)
         // Get detail page.
         BlogAPI.getPost(postId).then((posts)=>{
             console.log('123123',posts);
             this.props.getPostDetail(postId, posts);
-            this.setState({
-                thisPost:this.props.mixPost.post[postId]
-            })
+            this.setState(() => ({ thisPostId: postId}))
         });
 
         BlogAPI.getPostComment(postId).then((comments)=>{
-            console.log(comments);
+            console.log('comments',comments);
             this.props.getComment(comments);
         });
     }
 
+    comment = (comment) =>{
+        return (<li key={comment.id}>
+            <p>{comment.author}</p>
+            <p>{comment.body}</p>
+            <p>{comment.commentCount}</p>
+            <p>{comment.timestamp}</p>
+            <p>{comment.voteScore}</p>
+        </li>)
+    }
+
     render(){
+        console.log("+++++++++",this);
+        let thisPost = this.props.mixPost.posts[this.state.thisPostId]
+        let thisComments = Object.values(this.props.mixPost.comments).filter(comment => (comment.parentId === this.state.thisPostId))
+        console.log("+++++++++",thisComments);
         return (
             <div className="detail">
-                   <div key={this.state.thisPost.id}>
-                    <h1>{this.state.thisPost.title}</h1>
-                    <p>{this.state.thisPost.author}</p>
-                    <p>{this.state.thisPost.body}</p>
-                    <p>{this.state.thisPost.commentCount}</p>
-                    <p>{this.state.thisPost.voteScore}</p>
-                </div>
+                {thisPost && (
+                   <div key={thisPost.id}>
+                    <h1>{thisPost.title}</h1>
+                    <p>{thisPost.author}</p>
+                    <p>{thisPost.body}</p>
+                    <p>{thisPost.commentCount}</p>
+                    <p>{thisPost.voteScore}</p>
+                       <div className="comments"><ul>
+                           <h2>Comments</h2>
+                           {thisComments && thisComments.map((comment)=>{
+                               return this.comment(comment)
+                           })}
+                       </ul>
+                       </div>
+                </div>)}
             </div>
         )
     }

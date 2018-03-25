@@ -16,14 +16,11 @@ function post (state = initialPostState, action) {
             const {data} = action
             if (!data) return state
             arrReturn = has.mapKeys(data, (item)=>item.id)
-            console.log('arrReturn+++++',arrReturn);
             return arrReturn
         case UPDATE_POST:
-            console.log('current state:', state);
             const {postId,postDetail} = action
             arrReturn = state
             arrReturn[postId] = postDetail
-            console.log('arrReturn+++++',arrReturn);
             return arrReturn
         default :
             return state
@@ -48,7 +45,8 @@ function comment (state = initialCommentState, action) {
         case GET_ALL_COMMENT :
             arrReturn = []
             const {comments} = action
-            arrReturn = has.mapKeys(comments, (comments)=>comments.id)
+            arrReturn = has.mapKeys(comments, (comment)=>comment.id)
+            console.log("arrReturn is ++++", arrReturn)
             return arrReturn
         default :
             return state
