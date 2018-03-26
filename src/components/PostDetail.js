@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import {BrowserRouter as Router, Route , withRouter} from 'react-router-dom'
-import {getCategories,
+import {
+    getCategories,
     getComment,
     getPostDetail,
     getPosts,
     upsertComment,
-    deleteComment} from "../actions";
+    deleteComment, showModal
+} from "../actions";
 import * as BlogAPI from "../BlogAPI";
 import Modal from 'react-modal'
 
@@ -112,11 +114,14 @@ class PostDetail extends Component{
                     <p>{thisPost.body}</p>
                     <p>{thisPost.commentCount}</p>
                     <p>{thisPost.voteScore}</p>
-                       {/*<button*/}
-                           {/*className='icon-btn'*/}
-                           {/*onClick={() => this.setPostState(thisPost)}>*/}
-                           {/*Edit Post*/}
-                       {/*</button>*/}
+                       <button
+                           className='icon-btn'
+                           onClick={() => this.props.showModal({
+                                   modalType: 'post',
+                                   modalProps: thisPost
+                               })}>
+                           Edit Post
+                       </button>
                        <div className="comments"><ul>
                            <h2>Comments</h2>
                            <button
@@ -174,11 +179,12 @@ class PostDetail extends Component{
     }
 }
 
-function mapStateToProps({post,comment}){
+function mapStateToProps({post,comment,modal}){
     let mixPost = {}
     mixPost= {
         'posts': post,
-        'comments': comment
+        'comments': comment,
+        'modal': modal
     }
     return {mixPost}
 }
@@ -189,6 +195,7 @@ function mapDispatchToProps (dispatch) {
         getComment: (comments) => dispatch(getComment({comments})),
         upsertComment: (commentId, comment) => dispatch(upsertComment({commentId, comment})),
         deleteComment: (commentId) => dispatch(deleteComment(commentId)),
+        showModal: (content) => dispatch(showModal(content))
     }
 }
 

@@ -15,35 +15,34 @@ import * as BlogAPI from "../BlogAPI";
 import Modal from 'react-modal'
 
 class UpdatePost extends Component{
-    state = {
-        thisPostId: '',
-        editPost: {},
-        postModalOpen: false,
-    }
+
     closePostModal = () =>{
-        this.setState(()=>({postModalOpen: false,  editPost:{}}))
+        this.props.hideModal({
+            modalType: null,
+            modalProps: {}
+        })
     }
     handlePostChange(name, e){
-        let editPost = this.state.editPost;
-        editPost[name] = e.target.value;
-        this.setState({editPost: editPost})
+        let modalPropss = this.props.modal.modalProps;
+        modalPropss[name] = e.target.value;
+        this.props.showModal({
+            modalType: 'post',
+            modalProps: modalPropss
+        })
     }
     submitPost = () =>{
-        const {editPost} = this.state
+        let modalPropss = this.props.modal.modalProps;
 
-        BlogAPI.updateBlog(editPost.id, editPost).then((post) => {
+        BlogAPI.updateBlog(modalPropss.id, modalPropss).then((post) => {
             console.log(post);
             this.props.getPostDetail(post.id, post)
-        });
+        })
 
         this.closePostModal()
     }
-    setPostState(post){
-        this.setState(()=>({editPost: post, postModalOpen: true}))
-    }
     render(){
         return (<div key={this.state.thisPostId}>
-            {this.state.postModalOpen && (<Modal
+            {this.props.modal.modalType==='Post' && (<Modal
                     className='modal'
                     overlayClassName='overlay'
                     isOpen={this.state.postModalOpen}
