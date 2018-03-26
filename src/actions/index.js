@@ -4,6 +4,9 @@ export const GET_ALL_COMMENT = 'GET_ALL_COMMENT'
 export const UPDATE_POST = 'UPDATE_POST'
 export const UPSERT_ONE_COMMENT = "UPSERT_ONE_COMMENT"
 export const DELETE_ONE_COMMENT = "DELETE_ONE_COMMENT"
+export const HIDE_MODAL="HIDE_MODAL"
+export const SHOW_MODAL="SHOW_MODAL"
+
 export function getPosts (data) {
     return {
         type: GET_ALL_POSTS,
@@ -51,3 +54,16 @@ export function deleteComment ({commentId}) {
     }
 }
 
+export function hideModal({content}){
+    return {
+        type: HIDE_MODAL,
+        content
+    }
+}
+
+export function showModal({content}){
+    return {
+        type: SHOW_MODAL,
+        content
+    }
+}

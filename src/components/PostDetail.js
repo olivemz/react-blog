@@ -40,6 +40,8 @@ class PostDetail extends Component{
         this.setState(()=>({editComment: comment, commentModalOpen: true}))
     }
 
+
+
     addNewComment(){
         // generate new comment id and time stamp.
         let newComment = {
@@ -77,7 +79,7 @@ class PostDetail extends Component{
         const {editComment,blnNewComment} = this.state
 
         if(!blnNewComment){
-            BlogAPI.editComment(editComment.id).then((comment) => {
+            BlogAPI.editComment(editComment.id, editComment).then((comment) => {
                 console.log(comment);
                 this.props.upsertComment(comment.id, comment)
             });
@@ -89,14 +91,18 @@ class PostDetail extends Component{
                 this.props.upsertComment(comment.id, comment)
             });
         }
-        this.setState(()=>({commentModalOpen: false, blnNewComment: false}))
+        this.closeCommentModal()
     }
+
+    closeCommentModal = () =>{
+        this.setState(()=>({commentModalOpen: false, blnNewComment: false, editComment:{}}))
+    }
+
 
     render(){
         const {thisPostId, editComment, editPost, commentModalOpen, postModalOpen} = this.state
         let thisPost = this.props.mixPost.posts[thisPostId]
         let thisComments = Object.values(this.props.mixPost.comments).filter(comment => (comment.parentId === this.state.thisPostId))
-        console.log("+++++++++",thisComments);
         return (
             <div className="detail">
                 {thisPost && (
@@ -106,6 +112,11 @@ class PostDetail extends Component{
                     <p>{thisPost.body}</p>
                     <p>{thisPost.commentCount}</p>
                     <p>{thisPost.voteScore}</p>
+                       {/*<button*/}
+                           {/*className='icon-btn'*/}
+                           {/*onClick={() => this.setPostState(thisPost)}>*/}
+                           {/*Edit Post*/}
+                       {/*</button>*/}
                        <div className="comments"><ul>
                            <h2>Comments</h2>
                            <button
@@ -125,7 +136,7 @@ class PostDetail extends Component{
                     className='modal'
                     overlayClassName='overlay'
                     isOpen={commentModalOpen}
-                    //onRequestClose={this.closeIngredientsModal}
+                    onRequestClose={this.closeCommentModal}
                     contentLabel='Modal'
                 >
                     <div>
@@ -156,6 +167,7 @@ class PostDetail extends Component{
                         </button>
                     </div>
                 </Modal>
+
 
             </div>
         )

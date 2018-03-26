@@ -34,7 +34,7 @@ export const voteBlog = (blogId, option ) =>
         method:'POST', headers : headers, body: JSON.stringify({option})
     }).then(res => res.json())
 
-export const updateBlog = (blogId, content ) =>
+export const updateBlog = (blogId, content) =>
     fetch(`${api}/posts/${blogId}`,{
         method:'PUT', headers : headers, body: JSON.stringify({content})
     }).then(res => res.json())

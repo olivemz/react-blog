@@ -7,12 +7,18 @@ import {
     GET_ALL_COMMENT,
     UPDATE_POST,
     UPSERT_ONE_COMMENT,
-    DELETE_ONE_COMMENT
+    DELETE_ONE_COMMENT,
+    SHOW_MODAL,
+    HIDE_MODAL
 } from '../actions'
 
 const initialPostState = {}
 const initialCommentState = {}
 const initialCategoryState = []
+const intialModalState = {
+    modalType: null,
+    modalProps: {}
+}
 
 function post (state = initialPostState, action) {
     let arrReturn = {};
@@ -64,8 +70,23 @@ function comment (state = initialCommentState, action) {
     }
 }
 
+function modal (state = intialModalState, action){
+    switch (action.type){
+        case HIDE_MODAL:
+            return state
+        case SHOW_MODAL:
+            return {
+                modalType: action.modalType,
+                modalProps: action.modalProps
+            }
+        default:
+            return state
+    }
+}
+
 export default combineReducers({
     post,
     category,
-    comment
+    comment,
+    modal
 })

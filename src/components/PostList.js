@@ -7,8 +7,6 @@ import {BrowserRouter as Router, Route,withRouter, Link } from 'react-router-dom
 
 class PostList extends Component{
 
-
-
     static propType = {
         detailPage: PropTypes.array.isRequired,
     }
