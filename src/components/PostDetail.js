@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import {BrowserRouter as Router, Route , withRouter} from 'react-router-dom'
+import {BrowserRouter as Router, Route , withRouter, Link} from 'react-router-dom'
 import {
     getCategories,
     getComment,
@@ -128,6 +128,10 @@ class PostDetail extends Component{
         let thisComments = Object.values(this.props.mixPost.comments).filter(comment => (comment.parentId === this.state.thisPostId))
         return (
             <div className="detail">
+                <Link
+                    to={"/"}
+                >Back to main page</Link>
+
                 {thisPost && (
                    <div key={thisPost.id}>
                     <h1>{thisPost.title}</h1>
