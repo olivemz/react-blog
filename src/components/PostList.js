@@ -17,9 +17,8 @@ class PostList extends Component{
         category:null
     }
 
-    componentDidMount(){
+    componentWillMount(){
         let {category} = this.props.match.params
-        console.log(category)
         if(category===undefined) category = ''
         this.setState(()=>({category: category}))
     }
