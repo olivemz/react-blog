@@ -14,11 +14,14 @@ class PostList extends Component{
 
     static propType = {
         detailPage: PropTypes.array.isRequired,
+        category:null
     }
 
-    detailPage = (post) => {
-        console.log("this postId is", "/" + post.category+"/"+ post.id);
-
+    componentDidMount(){
+        let {category} = this.props.match.params
+        console.log(category)
+        if(category===undefined) category = ''
+        this.setState(()=>({category: category}))
     }
 
     post = (item,path) => {
@@ -34,24 +37,35 @@ class PostList extends Component{
     }
 
 
+    renderCategoryLink(categoryPath){
+        return (<div key={categoryPath}><Link
+                to={"/"+categoryPath}
+            >    view {categoryPath} type of Posts   </Link> </div>)
+    }
+
     render () {
-        let mixPost = {};
-        mixPost = this.props
+        let mixPost = this.props;
+        let categories = mixPost.category;
         console.log('----------------',mixPost)
         let thisPost = {
             id: Math.floor(Date.now())+111111111111,
             timestamp: Math.floor(Date.now())+111111111111,
             newPost: 'true'
         }
-        return ( <div className="List">
+        return (
+            <div >
+                {categories.map((categor) => {return this.renderCategoryLink(categor.path)})}
+            <div className="List">
             {('post' in mixPost) && Object.values(mixPost['post']).map(obj => {
-                    if ('posts' in obj && 'path' in obj)
+                    if ('posts' in obj && 'path' in obj ){
+                        if (this.state.category==='' || (this.state.category!=='' &&  this.state.category ===obj.path))
                         return (<div key={obj.path}><ul className={obj.path}>
                             { Object.values(obj.posts).map((postItem)=>{
                                 return this.post(postItem,obj.path)
                             })
                             }
                         </ul></div>)
+                    }
                 }
             )}
             <button
@@ -64,13 +78,16 @@ class PostList extends Component{
             </button>
             <UpdatePost
             />
-        </div>)
+        </div>
+                </div>)
 
     }
 }
 
-function mapStateToProps({modal}){
-    return {'modal': modal}
+function mapStateToProps({modal,category}){
+    return {'modal': modal,
+        'category': category
+    }
 }
 
 function mapDispatchToProps (dispatch) {

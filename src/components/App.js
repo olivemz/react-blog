@@ -9,9 +9,6 @@ import PostList from './PostList';
 import PostDetail from './PostDetail';
 
 class App extends Component {
-    state = {
-        testPost: null
-    }
     componentDidMount(){
         // In this api, body shall not be added, I will assume this.
         BlogAPI.getAllPosts().then((posts)=>{
@@ -24,9 +21,8 @@ class App extends Component {
             console.log(categories);
         });
     }
-
     render() {
-        console.log("*******",this);
+        console.log("*******",this.props);
         const {mixPost} = this.props
     return (
       <div className="App">
@@ -38,6 +34,13 @@ class App extends Component {
               getPostDetail= {this.props.getPostDetail}
               />
               )}/>
+          <Route exact path='/:category' render={() => (
+              <PostList
+                  post= {mixPost}
+                  getComment= {this.props.getComment}
+                  getPostDetail= {this.props.getPostDetail}
+              />
+          )}/>
           <Route exact path='/:category/:postId'
          render={() => (
              <PostDetail
