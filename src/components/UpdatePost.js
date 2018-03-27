@@ -17,37 +17,29 @@ import Modal from 'react-modal'
 class UpdatePost extends Component{
 
     closePostModal = () =>{
-        this.props.hideModal({
-            modalType: null,
-            modalProps: {}
-        })
+        this.props.hideModal(null, {})
+        console.log('123123',this.props)
     }
     handlePostChange(name, e){
         let modalPropss = this.props.modal.modalProps;
         modalPropss[name] = e.target.value;
-        this.props.showModal({
-            modalType: 'post',
-            modalProps: modalPropss
-        })
+        this.props.showModal(
+            'post',
+            modalPropss
+        )
     }
     submitPost = () =>{
         let modalPropss = this.props.modal.modalProps;
 
         BlogAPI.updateBlog(modalPropss.id, modalPropss).then((post) => {
-            console.log(post);
             this.props.getPostDetail(post.id, post)
         })
-
         this.closePostModal()
     }
     render(){
-        return (<div key={this.state.thisPostId}>
-            {this.props.modal.modalType==='Post' && (<Modal
-                    className='modal'
-                    overlayClassName='overlay'
-                    isOpen={this.state.postModalOpen}
-                    onRequestClose={this.closePostModal}
-                    contentLabel='Modal'>
+        console.log(this.props);
+        console.log(this.state);
+        return (
                     <div>
                         <label>
                             Title:
@@ -55,7 +47,7 @@ class UpdatePost extends Component{
                                 className='input'
                                 type='text'
                                 placeholder='Add Title'
-                                value={('title' in this.state.editPost) ? this.state.editPost['title'] : ''}
+                                value={('title' in this.props.modal.modalProps) ? this.props.modal.modalProps['title'] : ''}
                                 onChange={this.handlePostChange.bind(this, "title")}
                             />
                         </label>
@@ -65,7 +57,7 @@ class UpdatePost extends Component{
                                 className='input'
                                 type='text'
                                 placeholder='Add Body'
-                                value={('body' in this.state.editPost) ? this.state.editPost['body'] : ''}
+                                value={('body' in this.props.modal.modalProps) ? this.props.modal.modalProps['body'] : ''}
                                 onChange={this.handlePostChange.bind(this, "body")}
                             />
                         </label>
@@ -75,27 +67,20 @@ class UpdatePost extends Component{
                             Submit Comment
                         </button>
                     </div>
-                </Modal>)}
-
-            </div>
             )
     }
 }
 
 function mapStateToProps({post,modal}){
-    let mixPost = {}
-    mixPost= {
-        'posts': post,
-        'modal': modal
-    }
-    return {mixPost}
+    return {'posts': post,
+        'modal': modal}
 }
 
 function mapDispatchToProps (dispatch) {
     return {
         getPostDetail: (postId, postDetail) => dispatch(getPostDetail({postId,postDetail})),
-        hideModal: (content) => dispatch(hideModal(content)),
-        showModal: (content) => dispatch(showModal(content))
+        hideModal: (modalType, modalProps) => dispatch(hideModal({modalType, modalProps})),
+        showModal: (modalType, modalProps) => dispatch(showModal({modalType, modalProps}))
     }
 }
 

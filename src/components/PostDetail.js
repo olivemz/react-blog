@@ -7,10 +7,12 @@ import {
     getPostDetail,
     getPosts,
     upsertComment,
-    deleteComment, showModal
+    deleteComment, showModal, hideModal
 } from "../actions";
 import * as BlogAPI from "../BlogAPI";
 import Modal from 'react-modal'
+import UpdatePost from './UpdatePost'
+
 
 class PostDetail extends Component{
     state = {
@@ -42,6 +44,12 @@ class PostDetail extends Component{
         this.setState(()=>({editComment: comment, commentModalOpen: true}))
     }
 
+    closePostModal = () =>{
+        this.props.hideModal(
+            null, {}
+        )
+        this.setState(()=> ({modalType:null}))
+    }
 
 
     addNewComment(){
@@ -78,18 +86,28 @@ class PostDetail extends Component{
     }
 
     submitComment = () => {
-        const {editComment,blnNewComment} = this.state
-
+        const {editComment, blnNewComment} = this.state
         if(!blnNewComment){
-            BlogAPI.editComment(editComment.id, editComment).then((comment) => {
-                console.log(comment);
+            // timestamp: timestamp. Get this however you want.
+            //     body: String
+            let postComment = {
+                body: editComment.body,
+                timestamp: Math.floor(Date.now())+111111111111
+            }
+
+            BlogAPI.editComment(editComment.id, postComment).then((comment) => {
                 this.props.upsertComment(comment.id, comment)
-            });
+            })
         }
         else{
-            console.log(editComment);
-            BlogAPI.createComent(editComment).then((comment) => {
-                console.log('added new comment', comment);
+            let postComment = {
+                parentId: editComment.parentId,
+                author: editComment.author,
+                id: editComment.id,
+                body: editComment.body,
+                timestamp: Math.floor(Date.now())+111111111111
+            }
+            BlogAPI.createComent(postComment).then((comment) => {
                 this.props.upsertComment(comment.id, comment)
             });
         }
@@ -100,6 +118,9 @@ class PostDetail extends Component{
         this.setState(()=>({commentModalOpen: false, blnNewComment: false, editComment:{}}))
     }
 
+    closePostModal = () =>{
+        this.props.hideModal(null, {})
+    }
 
     render(){
         const {thisPostId, editComment, editPost, commentModalOpen, postModalOpen} = this.state
@@ -116,10 +137,10 @@ class PostDetail extends Component{
                     <p>{thisPost.voteScore}</p>
                        <button
                            className='icon-btn'
-                           onClick={() => this.props.showModal({
-                                   modalType: 'post',
-                                   modalProps: thisPost
-                               })}>
+                           onClick={() => this.props.showModal(
+                                   'post',
+                                   thisPost
+                               )}>
                            Edit Post
                        </button>
                        <div className="comments"><ul>
@@ -172,8 +193,15 @@ class PostDetail extends Component{
                         </button>
                     </div>
                 </Modal>
-
-
+                <Modal
+                    className='modal'
+                    overlayClassName='overlay'
+                    isOpen={(this.props.mixPost.modal.modalType==='post')?true:false}
+                    onRequestClose={this.closePostModal}
+                    contentLabel='Modal'>
+                <UpdatePost
+                />
+                </Modal>
             </div>
         )
     }
@@ -195,7 +223,8 @@ function mapDispatchToProps (dispatch) {
         getComment: (comments) => dispatch(getComment({comments})),
         upsertComment: (commentId, comment) => dispatch(upsertComment({commentId, comment})),
         deleteComment: (commentId) => dispatch(deleteComment(commentId)),
-        showModal: (content) => dispatch(showModal(content))
+        showModal: (modalType, modalProps) => dispatch(showModal({modalType, modalProps})),
+        hideModal: (modalType, modalProps) => dispatch(hideModal({modalType, modalProps}))
     }
 }
 

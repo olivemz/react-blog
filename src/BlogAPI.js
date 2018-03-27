@@ -1,8 +1,9 @@
 const api = "http://localhost:3001"
 
-let token = 'some token'
+const token = 'some token'
 
 const headers = {
+    'Content-Type':'application/json',
     'Authorization': token
 }
 
@@ -26,42 +27,42 @@ export const getComment = (commentId) =>
 
 export const createBlog = (newBlog) =>
     fetch(`${api}/posts`, {
-     method:'POST', headers: headers, body:JSON.stringify({newBlog})
+     method:'POST', headers: {...headers}, body:JSON.stringify(newBlog)
     }).then(res => res.json())
 
 export const voteBlog = (blogId, option ) =>
     fetch(`${api}/posts/${blogId}`,{
-        method:'POST', headers : headers, body: JSON.stringify({option})
+        method:'POST', headers:{...headers}, body: JSON.stringify(option)
     }).then(res => res.json())
 
 export const updateBlog = (blogId, content) =>
     fetch(`${api}/posts/${blogId}`,{
-        method:'PUT', headers : headers, body: JSON.stringify({content})
+        method:'PUT', headers: {...headers}, body: JSON.stringify(content)
     }).then(res => res.json())
 
 export const deleteBlog = (blogId ) =>
     fetch(`${api}/posts/${blogId}`,{
-        method:'DELETE', headers : headers
+        method:'DELETE', headers:{...headers}
     }).then(res => res.json())
 
 export const createComent = (content) =>
     fetch(`${api}/comments`,{
-        method:'POST', headers : headers, body: JSON.stringify({content})
+        method:'POST', headers : headers, body: JSON.stringify(content)
     }).then(res => res.json())
 
 export const voteComment = (commentId, option) =>
     fetch(`${api}/comments/${commentId}`,{
-        method:'POST', headers : headers, body: JSON.stringify({option})
+        method:'POST', headers : {...headers}, body: JSON.stringify(option)
     }).then(res => res.json())
 
 export const editComment = (commentId, content) =>
     fetch(`${api}/comments/${commentId}`,{
-        method:'PUT', headers : headers, body: JSON.stringify({content})
+        method:'PUT', headers :headers, body:JSON.stringify(content)
     }).then(res => res.json())
 
 
 export const deleteComment = (commentId) =>
     fetch(`${api}/comments/${commentId}`,{
-        method:'DELETE', headers : headers
+        method:'DELETE', headers : {...headers}
     }).then(res => res.json())
 

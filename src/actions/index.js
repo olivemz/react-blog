@@ -54,16 +54,18 @@ export function deleteComment ({commentId}) {
     }
 }
 
-export function hideModal({content}){
+export function hideModal({modalType, modalProps}){
     return {
         type: HIDE_MODAL,
-        content
+        modalType,
+        modalProps
     }
 }
 
-export function showModal({content}){
+export function showModal({modalType, modalProps}){
     return {
         type: SHOW_MODAL,
-        content
+        modalType,
+        modalProps
     }
 }

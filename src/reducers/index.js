@@ -73,7 +73,10 @@ function comment (state = initialCommentState, action) {
 function modal (state = intialModalState, action){
     switch (action.type){
         case HIDE_MODAL:
-            return state
+            return {
+                modalType: null,
+                modalProps: {}
+            }
         case SHOW_MODAL:
             return {
                 modalType: action.modalType,
