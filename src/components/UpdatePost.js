@@ -18,7 +18,6 @@ class UpdatePost extends Component{
 
     closePostModal = () =>{
         this.props.hideModal(null, {})
-        console.log('123123',this.props)
     }
     handlePostChange(name, e){
         let modalPropss = this.props.modal.modalProps;
@@ -30,16 +29,27 @@ class UpdatePost extends Component{
     }
     submitPost = () =>{
         let modalPropss = this.props.modal.modalProps;
+        let newPost = ('newPost' in this.props.modal.modalProps) ? true:false
+        if (newPost){
+            BlogAPI.createBlog(modalPropss).then((post) => {
+                this.props.getPostDetail(post.id, post)
+            })
+        }else{
+            BlogAPI.updateBlog(modalPropss.id, modalPropss).then((post) => {
+                this.props.getPostDetail(post.id, post)
+            })
+        }
 
-        BlogAPI.updateBlog(modalPropss.id, modalPropss).then((post) => {
-            this.props.getPostDetail(post.id, post)
-        })
         this.closePostModal()
     }
     render(){
-        console.log(this.props);
-        console.log(this.state);
-        return (
+        let newPost = ('newPost' in this.props.modal.modalProps) ? true:false
+        return (<Modal
+            className='modal'
+            overlayClassName='overlay'
+            isOpen={(this.props.modal.modalType==='post')?true:false}
+            onRequestClose={this.closePostModal}
+            contentLabel='Modal'>
                     <div>
                         <label>
                             Title:
@@ -61,12 +71,34 @@ class UpdatePost extends Component{
                                 onChange={this.handlePostChange.bind(this, "body")}
                             />
                         </label>
+                        {newPost && (
+                            <label>
+                                Author:
+                                <input
+                                    className='input'
+                                    type='text'
+                                    placeholder='Add Author'
+                                    value={('author' in this.props.modal.modalProps) ? this.props.modal.modalProps['author'] : ''}
+                                    onChange={this.handlePostChange.bind(this, "author")}
+                                />
+                            </label>)}
+                        {newPost && (<label>
+                            Category:
+                            <input
+                            className='input'
+                            type='text'
+                            placeholder='Add Category'
+                            value={('category' in this.props.modal.modalProps) ? this.props.modal.modalProps['category'] : ''}
+                            onChange={this.handlePostChange.bind(this, "category")}
+                            />
+                            </label>)}
                         <button
                             className='icon-btn'
                             onClick={this.submitPost}>
                             Submit Comment
                         </button>
                     </div>
+            </Modal>
             )
     }
 }

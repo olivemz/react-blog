@@ -193,15 +193,8 @@ class PostDetail extends Component{
                         </button>
                     </div>
                 </Modal>
-                <Modal
-                    className='modal'
-                    overlayClassName='overlay'
-                    isOpen={(this.props.mixPost.modal.modalType==='post')?true:false}
-                    onRequestClose={this.closePostModal}
-                    contentLabel='Modal'>
                 <UpdatePost
                 />
-                </Modal>
             </div>
         )
     }
