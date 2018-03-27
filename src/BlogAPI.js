@@ -30,9 +30,9 @@ export const createBlog = (newBlog) =>
      method:'POST', headers: {...headers}, body:JSON.stringify(newBlog)
     }).then(res => res.json())
 
-export const voteBlog = (blogId, option ) =>
+export const voteBlog = (blogId, option) =>
     fetch(`${api}/posts/${blogId}`,{
-        method:'POST', headers:{...headers}, body: JSON.stringify(option)
+        method:'POST', headers:headers, body: JSON.stringify(option)
     }).then(res => res.json())
 
 export const updateBlog = (blogId, content) =>

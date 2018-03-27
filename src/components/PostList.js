@@ -23,6 +23,13 @@ class PostList extends Component{
         this.setState(()=>({category: category}))
     }
 
+    voteBlog(blogId,VoteOption){
+        //VoteOption is either 'upVote' or 'downVote'
+        let voteBody = {option:VoteOption}
+        BlogAPI.voteBlog(blogId,voteBody).then((blog)=>this.props.getPostDetail(blogId, blog))
+
+    }
+
     post = (item,path) => {
         return (<li key={item.id}>
             <p>{item.title}</p>
@@ -32,6 +39,12 @@ class PostList extends Component{
             <Link
                 to={"/"+path+"/"+item.id}
             >View Detail</Link>
+            <button onClick={()=>this.voteBlog(item.id,'upVote')}>
+                vote up
+            </button>
+            <button onClick={()=>this.voteBlog(item.id,'downVote')}>
+                vote Donw
+            </button>
         </li>)
     }
 
@@ -86,16 +99,18 @@ class PostList extends Component{
     }
 }
 
-function mapStateToProps({modal,category}){
+function mapStateToProps({modal,category, post}){
     return {'modal': modal,
-        'category': category
+        'category': category,
+        'posts': post,
     }
 }
 
 function mapDispatchToProps (dispatch) {
     return {
         showModal: (modalType, modalProps) => dispatch(showModal({modalType, modalProps})),
-        hideModal: (modalType, modalProps) => dispatch(hideModal({modalType, modalProps}))
+        hideModal: (modalType, modalProps) => dispatch(hideModal({modalType, modalProps})),
+        getPostDetail: (postId, postDetail) => dispatch(getPostDetail({postId,postDetail})),
     }
 }
 

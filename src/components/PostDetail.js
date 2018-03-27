@@ -40,6 +40,8 @@ class PostDetail extends Component{
         });
     }
 
+
+
     setCommentState(comment){
         this.setState(()=>({editComment: comment, commentModalOpen: true}))
     }
@@ -122,6 +124,12 @@ class PostDetail extends Component{
         this.props.hideModal(null, {})
     }
 
+    voteBlog(blogId,VoteOption){
+        //VoteOption is either 'upVote' or 'downVote'
+        let voteBody = {option:VoteOption}
+        BlogAPI.voteBlog(blogId,voteBody).then((blog)=>this.props.getPostDetail(blogId, blog))
+
+    }
     render(){
         const {thisPostId, editComment, editPost, commentModalOpen, postModalOpen} = this.state
         let thisPost = this.props.mixPost.posts[thisPostId]
@@ -146,6 +154,12 @@ class PostDetail extends Component{
                                    thisPost
                                )}>
                            Edit Post
+                       </button>
+                       <button onClick={()=>this.voteBlog(thisPost.id,'upVote')}>
+                           vote up
+                       </button>
+                       <button onClick={()=>this.voteBlog(thisPost.id,'downVote')}>
+                           vote Donw
                        </button>
                        <div className="comments"><ul>
                            <h2>Comments</h2>
