@@ -53,6 +53,9 @@ class PostList extends Component{
         }
         return (
             <div >
+                <Link
+                    to={"/"}
+                >Back to main page</Link>
                 {categories.map((categor) => {return this.renderCategoryLink(categor.path)})}
             <div className="List">
             {('post' in mixPost) && Object.values(mixPost['post']).map(obj => {
