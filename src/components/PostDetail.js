@@ -7,7 +7,7 @@ import {
     getPostDetail,
     getPosts,
     upsertComment,
-    deleteComment, showModal, hideModal
+    showModal, hideModal
 } from "../actions";
 import * as BlogAPI from "../BlogAPI";
 import Modal from 'react-modal'
@@ -46,13 +46,6 @@ class PostDetail extends Component{
         this.setState(()=>({editComment: comment, commentModalOpen: true}))
     }
 
-    closePostModal = () =>{
-        this.props.hideModal(
-            null, {}
-        )
-        this.setState(()=> ({modalType:null}))
-    }
-
 
     addNewComment(){
         // generate new comment id and time stamp.
@@ -68,16 +61,29 @@ class PostDetail extends Component{
 
     comment = (comment) =>{
         return (<li key={comment.id}>
-            <p>{comment.author}</p>
-            <p>{comment.body}</p>
-            <p>{comment.commentCount}</p>
-            <p>{comment.timestamp}</p>
-            <p>{comment.voteScore}</p>
+            <p>Author: {comment.author}</p>
+            <p>Body: {comment.body}</p>
+            <p>Comment Count: {comment.commentCount}</p>
+            <p>time: {comment.timestamp}</p>
+            <p>VoteScore: {comment.voteScore}</p>
+            <div>
             <button
                 className='icon-btn'
                 onClick={() => this.setCommentState(comment)}>
                 Edit
             </button>
+            </div>
+            <div>
+                <button onClick={()=>this.voteComment(comment.id,'upVote')}>
+                    vote up
+                </button>
+                <button onClick={()=>this.voteComment(comment.id,'downVote')}>
+                    vote Donw
+                </button>
+                <button onClick={()=>this.deleteComment(comment.id)}>
+                    Delete Comment
+                </button>
+            </div>
         </li>)
     }
 
@@ -120,19 +126,26 @@ class PostDetail extends Component{
         this.setState(()=>({commentModalOpen: false, blnNewComment: false, editComment:{}}))
     }
 
-    closePostModal = () =>{
-        this.props.hideModal(null, {})
-    }
-
     voteBlog(blogId,VoteOption){
         //VoteOption is either 'upVote' or 'downVote'
         let voteBody = {option:VoteOption}
-        BlogAPI.voteBlog(blogId,voteBody).then((blog)=>this.props.getPostDetail(blogId, blog))
+        BlogAPI.voteBlog(blogId,voteBody).then((blog)=>{this.props.getPostDetail(blogId, blog)})
 
     }
+
+    voteComment(commentId,VoteOption){
+        //VoteOption is either 'upVote' or 'downVote'
+        let voteBody = {option:VoteOption}
+        BlogAPI.voteComment(commentId,voteBody).then((comment)=>{this.props.upsertComment(commentId, comment)})
+    }
+
+    deleteComment(commentId){
+        BlogAPI.deleteComment(commentId).then((comment)=>{this.props.upsertComment(commentId, comment)})
+    }
+
     render(){
         const {thisPostId, editComment, editPost, commentModalOpen, postModalOpen} = this.state
-        let thisPost = this.props.mixPost.posts[thisPostId]
+        const thisPost = this.props.mixPost.posts[thisPostId]
         let thisComments = Object.values(this.props.mixPost.comments).filter(comment => (comment.parentId === this.state.thisPostId))
         return (
             <div className="detail">
@@ -142,11 +155,11 @@ class PostDetail extends Component{
 
                 {thisPost && (
                    <div key={thisPost.id}>
-                    <h1>{thisPost.title}</h1>
-                    <p>{thisPost.author}</p>
-                    <p>{thisPost.body}</p>
-                    <p>{thisPost.commentCount}</p>
-                    <p>{thisPost.voteScore}</p>
+                    <h1>Title: {thisPost.title}</h1>
+                    <p>Author: {thisPost.author}</p>
+                    <p>Body: {thisPost.body}</p>
+                    <p>Comment Count: {thisPost.commentCount}</p>
+                    <p>Vote Score: {thisPost.voteScore}</p>
                        <button
                            className='icon-btn'
                            onClick={() => this.props.showModal(
@@ -233,7 +246,6 @@ function mapDispatchToProps (dispatch) {
         getPostDetail: (postId, postDetail) => dispatch(getPostDetail({postId,postDetail})),
         getComment: (comments) => dispatch(getComment({comments})),
         upsertComment: (commentId, comment) => dispatch(upsertComment({commentId, comment})),
-        deleteComment: (commentId) => dispatch(deleteComment(commentId)),
         showModal: (modalType, modalProps) => dispatch(showModal({modalType, modalProps})),
         hideModal: (modalType, modalProps) => dispatch(hideModal({modalType, modalProps}))
     }

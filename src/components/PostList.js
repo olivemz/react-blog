@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PostDetail from './PostDetail';
 import * as BlogAPI from "../BlogAPI";
 import {
-    deleteComment, getCategories, getComment, getPostDetail, getPosts, hideModal, showModal,
+    getCategories, getComment, getPostDetail, getPosts, hideModal, showModal,
     upsertComment
 } from '../actions'
 import PropTypes from 'prop-types'

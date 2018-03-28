@@ -47,13 +47,6 @@ export function upsertComment ({commentId, comment}) {
     }
 }
 
-export function deleteComment ({commentId}) {
-    return {
-        type: DELETE_ONE_COMMENT,
-        commentId
-    }
-}
-
 export function hideModal({modalType, modalProps}){
     return {
         type: HIDE_MODAL,

@@ -1,6 +1,6 @@
 const api = "http://localhost:3001"
 
-const token = 'some token'
+const token = 'TOKEN'
 
 const headers = {
     'Content-Type':'application/json',

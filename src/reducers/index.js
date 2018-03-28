@@ -61,10 +61,6 @@ function comment (state = initialCommentState, action) {
             var {commentId, comment} = action
             arrReturn[commentId] = comment
             return arrReturn
-        case DELETE_ONE_COMMENT:
-            var {commentId} = action
-            (commentId in arrReturn) && delete arrReturn[commentId]
-            return arrReturn
         default :
             return state
     }
