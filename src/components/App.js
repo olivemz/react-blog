@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {getPosts, getCategories, getPostDetail, getComment} from '../actions'
-import logo from '../logo.svg';
 import { BrowserRouter as Router, Route , withRouter } from 'react-router-dom';
 import * as BlogAPI from '../BlogAPI.js';
 import './App.css';
@@ -13,16 +12,16 @@ class App extends Component {
         // In this api, body shall not be added, I will assume this.
         BlogAPI.getAllPosts().then((posts)=>{
             this.props.getAllPosts(posts);
-            console.log(posts);
+            //console.log(posts);
         });
 
         BlogAPI.getAllCategories().then((categories)=>{
             this.props.getAllCategory(categories);
-            console.log(categories);
+            //console.log(categories);
         });
     }
     render() {
-        console.log("*******",this.props);
+        //console.log("*******",this.props);
         const {mixPost} = this.props
     return (
       <div className="App">

@@ -67,7 +67,7 @@ class PostList extends Component{
     render () {
         let mixPost = this.props;
         let categories = mixPost.category;
-        console.log('----------------',mixPost)
+        //console.log('----------------',mixPost)
         let thisPost = {
             id: Math.floor(Date.now())+111111111111,
             timestamp: Math.floor(Date.now())+111111111111,

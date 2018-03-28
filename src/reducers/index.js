@@ -7,7 +7,6 @@ import {
     GET_ALL_COMMENT,
     UPDATE_POST,
     UPSERT_ONE_COMMENT,
-    DELETE_ONE_COMMENT,
     SHOW_MODAL,
     HIDE_MODAL
 } from '../actions'

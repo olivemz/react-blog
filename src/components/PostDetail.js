@@ -26,16 +26,16 @@ class PostDetail extends Component{
 
     componentDidMount(){
         const {postId, category} = this.props.match.params
-        console.log("this.pros",this.props)
+        //console.log("this.pros",this.props)
         // Get detail page.
         BlogAPI.getPost(postId).then((posts)=>{
-            console.log('123123',posts);
+            //console.log('123123',posts);
             this.props.getPostDetail(postId, posts);
             this.setState(() => ({ thisPostId: postId}))
         });
 
         BlogAPI.getPostComment(postId).then((comments)=>{
-            console.log('comments',comments);
+            //console.log('comments',comments);
             this.props.getComment(comments);
         });
     }
