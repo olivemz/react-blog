@@ -72,6 +72,9 @@ class PostDetail extends Component{
                 onClick={() => this.setCommentState(comment)}>
                 Edit
             </button>
+            <button onClick={()=>this.deleteComment(comment.id)}>
+                Delete Comment
+            </button>
             </div>
             <div>
                 <button onClick={()=>this.voteComment(comment.id,'upVote')}>
@@ -79,9 +82,6 @@ class PostDetail extends Component{
                 </button>
                 <button onClick={()=>this.voteComment(comment.id,'downVote')}>
                     vote Donw
-                </button>
-                <button onClick={()=>this.deleteComment(comment.id)}>
-                    Delete Comment
                 </button>
             </div>
         </li>)
@@ -129,18 +129,18 @@ class PostDetail extends Component{
     voteBlog(blogId,VoteOption){
         //VoteOption is either 'upVote' or 'downVote'
         let voteBody = {option:VoteOption}
-        BlogAPI.voteBlog(blogId,voteBody).then((blog)=>{this.props.getPostDetail(blogId, blog)})
+        BlogAPI.voteBlog(blogId,voteBody).then((blog)=>{this.props.getPostDetail(blog.id, blog)})
 
     }
 
     voteComment(commentId,VoteOption){
         //VoteOption is either 'upVote' or 'downVote'
         let voteBody = {option:VoteOption}
-        BlogAPI.voteComment(commentId,voteBody).then((comment)=>{this.props.upsertComment(commentId, comment)})
+        BlogAPI.voteComment(commentId,voteBody).then((comment)=>{this.props.upsertComment(comment.id, comment)})
     }
 
     deleteComment(commentId){
-        BlogAPI.deleteComment(commentId).then((comment)=>{this.props.upsertComment(commentId, comment)})
+        BlogAPI.deleteComment(commentId).then((comment)=>{this.props.upsertComment(comment.id, comment)})
     }
 
     render(){
@@ -160,6 +160,7 @@ class PostDetail extends Component{
                     <p>Body: {thisPost.body}</p>
                     <p>Comment Count: {thisPost.commentCount}</p>
                     <p>Vote Score: {thisPost.voteScore}</p>
+                      <div>
                        <button
                            className='icon-btn'
                            onClick={() => this.props.showModal(
@@ -168,12 +169,15 @@ class PostDetail extends Component{
                                )}>
                            Edit Post
                        </button>
+                      </div>
+                       <div>
                        <button onClick={()=>this.voteBlog(thisPost.id,'upVote')}>
                            vote up
                        </button>
                        <button onClick={()=>this.voteBlog(thisPost.id,'downVote')}>
                            vote Donw
                        </button>
+                           </div>
                        <div className="comments"><ul>
                            <h2>Comments</h2>
                            <button

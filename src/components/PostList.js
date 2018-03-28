@@ -26,8 +26,12 @@ class PostList extends Component{
     voteBlog(blogId,VoteOption){
         //VoteOption is either 'upVote' or 'downVote'
         let voteBody = {option:VoteOption}
-        BlogAPI.voteBlog(blogId,voteBody).then((blog)=>this.props.getPostDetail(blogId, blog))
+        BlogAPI.voteBlog(blogId,voteBody).then((blog)=>this.props.getPostDetail(blog.id, blog))
 
+    }
+
+    deleteBlog(blogId){
+        BlogAPI.deleteBlog(blogId).then((deleteBlog)=>{this.props.getPostDetail(deleteBlog.id, deleteBlog)})
     }
 
     post = (item,path) => {
@@ -36,14 +40,19 @@ class PostList extends Component{
             <p>{item.author}</p>
             <p>{item.commentCount}</p>
             <p>{item.voteScore}</p>
+            <div>
             <Link
                 to={"/"+path+"/"+item.id}
             >View Detail</Link>
+            </div>
             <button onClick={()=>this.voteBlog(item.id,'upVote')}>
                 vote up
             </button>
             <button onClick={()=>this.voteBlog(item.id,'downVote')}>
                 vote Donw
+            </button>
+            <button onClick={()=>this.deleteBlog(item.id)}>
+                delete Blog
             </button>
         </li>)
     }
