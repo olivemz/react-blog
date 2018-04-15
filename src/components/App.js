@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {getPosts, getCategories, getPostDetail, getComment} from '../actions'
+import { getCategories } from '../actions/Categories'
+import {getPosts,getPostDetail} from '../actions/Posts'
+import {getComment} from '../actions/Comments'
 import { BrowserRouter as Router, Route , withRouter } from 'react-router-dom';
 import * as BlogAPI from '../BlogAPI.js';
 import './App.css';

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import PostDetail from './PostDetail';
 import * as BlogAPI from "../BlogAPI";
 import {
-    getCategories, getComment, getPostDetail, getPosts, hideModal, showModal,
-    upsertComment
-} from '../actions'
+    hideModal, showModal,
+} from '../actions/Modal'
 import PropTypes from 'prop-types'
 import {BrowserRouter as Router, Route,withRouter, Link } from 'react-router-dom'
 import {connect} from "react-redux";
 import UpdatePost from './UpdatePost'
+
+import {getPostDetail} from '../actions/Posts'
 
 class PostList extends Component{
 

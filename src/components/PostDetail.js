@@ -2,16 +2,14 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import {BrowserRouter as Router, Route , withRouter, Link} from 'react-router-dom'
 import {
-    getCategories,
-    getComment,
-    getPostDetail,
-    getPosts,
-    upsertComment,
     showModal, hideModal
-} from "../actions";
+} from "../actions/Modal";
 import * as BlogAPI from "../BlogAPI";
 import Modal from 'react-modal'
 import UpdatePost from './UpdatePost'
+
+import {getPostDetail} from '../actions/Posts'
+import {getComment,upsertComment} from '../actions/Comments'
 
 
 class PostDetail extends Component{

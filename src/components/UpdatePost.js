@@ -1,24 +1,17 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import {BrowserRouter as Router, Route , withRouter} from 'react-router-dom'
-import {
-    deleteComment,
-    getCategories,
-    getComment,
-    getPostDetail,
-    getPosts,
-    hideModal,
-    showModal,
-    upsertComment
-} from "../actions";
+import {hideModal, showModal} from "../actions/Modal"
 import * as BlogAPI from "../BlogAPI";
 import Modal from 'react-modal'
+
+import {getPostDetail} from '../actions/Posts'
 
 class UpdatePost extends Component{
 
     closePostModal = () =>{
         this.props.hideModal(null, {})
     }
+
     handlePostChange(name, e){
         let modalPropss = this.props.modal.modalProps;
         modalPropss[name] = e.target.value;
