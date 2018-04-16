@@ -5,6 +5,7 @@ import * as BlogAPI from "../BlogAPI";
 import Modal from 'react-modal'
 
 import {getPostDetail} from '../actions/Posts'
+import {withRouter} from "react-router-dom";
 
 class UpdatePost extends Component{
 
@@ -109,7 +110,7 @@ function mapDispatchToProps (dispatch) {
     }
 }
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(UpdatePost);
+)(UpdatePost));

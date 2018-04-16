@@ -22,6 +22,7 @@ class App extends Component {
             //console.log(categories);
         });
     }
+
     render() {
         //console.log("*******",this.props);
         const {mixPost} = this.props

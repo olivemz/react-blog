@@ -3,25 +3,14 @@ import * as BlogAPI from "../BlogAPI";
 import {
     hideModal, showModal,
 } from '../actions/Modal'
-import PropTypes from 'prop-types'
-import {BrowserRouter as Router, Route,withRouter, Link } from 'react-router-dom'
+
+import {withRouter, Link } from 'react-router-dom'
 import {connect} from "react-redux";
 import UpdatePost from './UpdatePost'
 
 import {getPostDetail} from '../actions/Posts'
 
 class PostList extends Component{
-
-    static propType = {
-        detailPage: PropTypes.array.isRequired,
-        category:null
-    }
-
-    componentWillMount(){
-        let {category} = this.props.match.params
-        if(category===undefined) category = ''
-        this.setState(()=>({category: category}))
-    }
 
     voteBlog(blogId,VoteOption){
         //VoteOption is either 'upVote' or 'downVote'
@@ -58,39 +47,35 @@ class PostList extends Component{
     }
 
 
-    renderCategoryLink(categoryPath){
-        return (<div key={categoryPath}><Link
-                to={"/"+categoryPath}
-            >    view {categoryPath} type of Posts   </Link> </div>)
-    }
 
     render () {
         let mixPost = this.props;
         let categories = mixPost.category;
-        //console.log('----------------',mixPost)
+        let {category} = this.props.match.params
+        if(category===undefined) category = ''
+
+        console.log('----------------',mixPost)
         let thisPost = {
             id: Math.floor(Date.now())+111111111111,
             timestamp: Math.floor(Date.now())+111111111111,
             newPost: 'true'
         }
         return (
-            <div >
+            <div key='master-list'>
                 <Link
                     to={"/"}
                 >Back to main page</Link>
-                {categories.map((categor) => {return this.renderCategoryLink(categor.path)})}
+                {categories.map((category) => (<div key={category.path}><Link to={"/"+category.path}>view {category.path} type of Posts</Link></div>))}
             <div className="List">
-            {('post' in mixPost) && Object.values(mixPost['post']).map(obj => {
-                    if ('posts' in obj && 'path' in obj ){
-                        if (this.state.category==='' || (this.state.category!=='' &&  this.state.category ===obj.path))
-                        return (<div key={obj.path}><ul className={obj.path}>
-                            { Object.values(obj.posts).map((postItem)=>{
-                                return this.post(postItem,obj.path)
-                            })
-                            }
-                        </ul></div>)
+            {('post' in mixPost) && Object.values(mixPost['post']).map(obj =>
+                ('posts' in obj && 'path' in obj )
+                && (category==='' || (category!=='' &&  category ===obj.path))
+                && (<div key={obj.path}><ul className={obj.path}>
+                    { Object.values(obj.posts).map((postItem)=>(
+                        this.post(postItem,obj.path))
+                    )
                     }
-                }
+                </ul></div>)
             )}
             <button
                 className='icon-btn'
