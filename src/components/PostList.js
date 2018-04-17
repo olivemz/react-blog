@@ -70,8 +70,8 @@ class PostList extends Component{
             {('post' in mixPost) && Object.values(mixPost['post']).map(obj =>
                 ('posts' in obj && 'path' in obj )
                 && (category==='' || (category!=='' &&  category ===obj.path))
-                && (<div key={obj.path}><ul className={obj.path}>
-                    { Object.values(obj.posts).map((postItem)=>(
+                &&(<div key={obj.path}><ul className={obj.path}>
+                    { Object.values(obj.posts).filter(postItem => postItem.deleted === false).map((postItem)=>(
                         this.post(postItem,obj.path))
                     )
                     }

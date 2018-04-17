@@ -3,7 +3,7 @@ import has from 'lodash'
 const initialCommentState = {}
 
 export function comment (state = initialCommentState, action) {
-    let arrReturn = state;
+    let arrReturn = {...state};
     switch (action.type) {
         case GET_ALL_COMMENT :
             var {comments} = action

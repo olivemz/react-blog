@@ -144,7 +144,7 @@ class PostDetail extends Component{
     render(){
         const {thisPostId, editComment, editPost, commentModalOpen, postModalOpen} = this.state
         const thisPost = this.props.mixPost.posts[thisPostId]
-        let thisComments = Object.values(this.props.mixPost.comments).filter(comment => (comment.parentId === this.state.thisPostId))
+        let thisComments = Object.values(this.props.mixPost.comments).filter(comment => (comment.parentId === this.state.thisPostId&& comment.deleted ===false))
         return (
             <div className="detail">
                 <Link
