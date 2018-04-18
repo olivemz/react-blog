@@ -10,6 +10,21 @@ import UpdatePost from './UpdatePost'
 
 import {getPostDetail} from '../actions/Posts'
 
+
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
+
+
+const styles = theme => ({
+    root: {
+        width: '100%',
+        marginTop: theme.spacing.unit * 3,
+        overflowX: 'auto',
+    },
+    table: {
+        minWidth: 700,
+    },
+});
+
 class PostList extends Component{
 
     voteBlog(blogId,VoteOption){
@@ -24,26 +39,24 @@ class PostList extends Component{
     }
 
     post = (item,path) => {
-        return (<li key={item.id}>
-            <p>{item.title}</p>
-            <p>{item.author}</p>
-            <p>{item.commentCount}</p>
-            <p>{item.voteScore}</p>
-            <div>
-            <Link
+        return (<TableRow key={item.id}>
+                <TableCell><p>{item.title}</p></TableCell>
+                <TableCell><p>{item.author}</p></TableCell>
+                <TableCell><p>{item.commentCount}</p></TableCell>
+                <TableCell><p>{item.voteScore}</p></TableCell>
+                <TableCell><button onClick={()=>this.voteBlog(item.id,'upVote')}>
+                    vote up
+                </button></TableCell>
+                <TableCell><button onClick={()=>this.voteBlog(item.id,'downVote')}>
+                    vote Donw
+                </button></TableCell>
+                <TableCell><button onClick={()=>this.deleteBlog(item.id)}>
+                    delete Blog
+                </button></TableCell>
+            <TableCell><Link
                 to={"/"+path+"/"+item.id}
-            >View Detail</Link>
-            </div>
-            <button onClick={()=>this.voteBlog(item.id,'upVote')}>
-                vote up
-            </button>
-            <button onClick={()=>this.voteBlog(item.id,'downVote')}>
-                vote Donw
-            </button>
-            <button onClick={()=>this.deleteBlog(item.id)}>
-                delete Blog
-            </button>
-        </li>)
+            >View Detail</Link></TableCell>
+            </TableRow>)
     }
 
 
@@ -65,18 +78,30 @@ class PostList extends Component{
                 <Link
                     to={"/"}
                 >Back to main page</Link>
-                {categories.map((category) => (<div key={category.path}><Link to={"/"+category.path}>view {category.path} type of Posts</Link></div>))}
+                {categories.map((category) => (<div key= {"category" + category.path}><Link to={"/"+category.path}>view {category.path} type of Posts</Link></div>))}
             <div className="List">
+                <pager className='post-table'><Table className='post-list'><TableHead>
+                    <TableRow>
+                        <TableCell>Post Title</TableCell>
+                        <TableCell>Author</TableCell>
+                        <TableCell>comments</TableCell>
+                        <TableCell>vote score</TableCell>
+                        <TableCell>Vote Up</TableCell>
+                        <TableCell>Vote Down</TableCell>
+                        <TableCell>Delete</TableCell>
+                        <TableCell>Detail</TableCell>
+                    </TableRow>
+                </TableHead><TableBody >
             {('post' in mixPost) && Object.values(mixPost['post']).map(obj =>
                 ('posts' in obj && 'path' in obj )
                 && (category==='' || (category!=='' &&  category ===obj.path))
-                &&(<div key={obj.path}><ul className={obj.path}>
-                    { Object.values(obj.posts).filter(postItem => postItem.deleted === false).map((postItem)=>(
+                &&( Object.values(obj.posts).filter(postItem => postItem.deleted === false).map((postItem)=>(
                         this.post(postItem,obj.path))
                     )
-                    }
-                </ul></div>)
+                )
             )}
+                </TableBody>
+            </Table></pager>
             <button
                 className='icon-btn'
                 onClick={() => this.props.showModal(
@@ -108,7 +133,9 @@ function mapDispatchToProps (dispatch) {
     }
 }
 
+
+
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(PostList));
+)(PostList))
