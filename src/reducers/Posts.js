@@ -4,7 +4,6 @@ const initialPostState = {}
 
 export function post (state = initialPostState, action) {
     let arrReturn = {...state};
-    console.log(arrReturn);
     switch (action.type) {
         case GET_ALL_POSTS :
             var {data} = action

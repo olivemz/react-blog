@@ -78,13 +78,12 @@ class UpdatePost extends Component{
                             </label>)}
                         {newPost && (<label>
                             Category:
-                            <input
-                            className='input'
-                            type='text'
-                            placeholder='Add Category'
-                            value={('category' in this.props.modal.modalProps) ? this.props.modal.modalProps['category'] : ''}
-                            onChange={this.handlePostChange.bind(this, "category")}
-                            />
+
+
+                            <select  value={('category' in this.props.modal.modalProps) ? this.props.modal.modalProps['category'] : ''}
+                                     onChange={this.handlePostChange.bind(this, "category")}>
+                                ({this.props.category.map((option) => (<option key={"option" + option.name} value={option.name}>{option.name}</option>))})
+                            </select>
                             </label>)}
                         <button
                             className='icon-btn'
@@ -97,8 +96,9 @@ class UpdatePost extends Component{
     }
 }
 
-function mapStateToProps({post,modal}){
+function mapStateToProps({post,modal,category}){
     return {'posts': post,
+        'category': category,
         'modal': modal}
 }
 
