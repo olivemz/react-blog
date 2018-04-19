@@ -2,17 +2,18 @@ README.
 
 This project is build to give very basic functions.
 
-In main page, user is able to use navigate button to go to each category lists.
-User is able to delete, create, vote posts, or got to detail post page.
+In main page,
+
+Posts are list in a table.
+user is able to
+1. vote post in list.
+2. delete blog
+3. add a new post.
+4. sort lost based on vote score (default id desc order).
+5. view detail of blog.
 
 In detail page, user is able to
 
-1. vote, edit posts.
+1. vote and edit posts details.
 2. create, edit, delete, vote comments.
 3. go back to main page.
-
-
-Please note, There is a known bug without fixed yet is. The redux store update will not directly
-update page, so user need to refresh page to see change if any of modification or link does not works.
-
-Also, no validation or error page is defined.
