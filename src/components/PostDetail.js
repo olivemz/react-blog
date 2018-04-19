@@ -8,8 +8,10 @@ import * as BlogAPI from "../BlogAPI";
 import Modal from 'react-modal'
 import UpdatePost from './UpdatePost'
 
-import {getPostDetail} from '../actions/Posts'
+import {getPostDetail, getPosts} from '../actions/Posts'
 import {getComment,upsertComment} from '../actions/Comments'
+import {getAllCategories} from "../BlogAPI";
+import {getAllPosts} from "../BlogAPI";
 
 
 class PostDetail extends Component{
@@ -61,27 +63,31 @@ class PostDetail extends Component{
         return (<li key={comment.id}>
             <p>Author: {comment.author}</p>
             <p>Body: {comment.body}</p>
-            <p>Comment Count: {comment.commentCount}</p>
             <p>time: {comment.timestamp}</p>
             <p>VoteScore: {comment.voteScore}</p>
             <div>
+                <div>
             <button
                 className='icon-btn'
                 onClick={() => this.setCommentState(comment)}>
-                Edit
+                Edit Comment
             </button>
+                </div>
+                <div>
             <button onClick={()=>this.deleteComment(comment.id)}>
                 Delete Comment
             </button>
             </div>
             <div>
-                <button onClick={()=>this.voteComment(comment.id,'upVote')}>
-                    vote up
-                </button>
-                <button onClick={()=>this.voteComment(comment.id,'downVote')}>
-                    vote Donw
-                </button>
+            <button onClick={()=>this.voteComment(comment.id,'upVote')}>
+                vote up Comment
+            </button>
+
+            <button onClick={()=>this.voteComment(comment.id,'downVote')}>
+                vote Donw Comment
+            </button>
             </div>
+                </div>
         </li>)
     }
 
@@ -115,7 +121,9 @@ class PostDetail extends Component{
             }
             BlogAPI.createComent(postComment).then((comment) => {
                 this.props.upsertComment(comment.id, comment)
+                BlogAPI.getPost(postComment.parentId).then((postDetail)=>{this.props.getPostDetail(postDetail.id, postDetail)})
             });
+
         }
         this.closeCommentModal()
     }
@@ -170,10 +178,10 @@ class PostDetail extends Component{
                       </div>
                        <div>
                        <button onClick={()=>this.voteBlog(thisPost.id,'upVote')}>
-                           vote up
+                           vote up Post
                        </button>
                        <button onClick={()=>this.voteBlog(thisPost.id,'downVote')}>
-                           vote Donw
+                           vote Down Post
                        </button>
                            </div>
                        <div className="comments"><ul>
