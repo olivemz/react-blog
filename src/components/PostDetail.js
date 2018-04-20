@@ -148,6 +148,9 @@ class PostDetail extends Component{
     deleteComment(commentId){
         BlogAPI.deleteComment(commentId).then((comment)=>{this.props.upsertComment(comment.id, comment)})
     }
+    deleteBlog(blogId){
+        BlogAPI.deleteBlog(blogId).then((deleteBlog)=>{this.props.getPostDetail(deleteBlog.id, deleteBlog)}).then(() => window.history.back())
+    }
 
     render(){
         const {thisPostId, editComment, editPost, commentModalOpen, postModalOpen} = this.state
@@ -175,6 +178,11 @@ class PostDetail extends Component{
                                )}>
                            Edit Post
                        </button>
+                      <button
+                          className='icon-btn'
+                          onClick={()=>this.deleteBlog(thisPost.id)}>
+                          Delete Post
+                      </button>
                       </div>
                        <div>
                        <button onClick={()=>this.voteBlog(thisPost.id,'upVote')}>
