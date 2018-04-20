@@ -16,6 +16,7 @@ class UpdatePost extends Component{
     handlePostChange(name, e){
         let modalPropss = this.props.modal.modalProps;
         modalPropss[name] = e.target.value;
+
         this.props.showModal(
             'post',
             modalPropss
@@ -25,6 +26,10 @@ class UpdatePost extends Component{
         let modalPropss = this.props.modal.modalProps;
         let newPost = ('newPost' in this.props.modal.modalProps) ? true:false
         if (newPost){
+            // fix bug that category could be initialised as empty.
+            if(!(modalPropss['category'])){
+                modalPropss['category'] = 'react';
+            }
             BlogAPI.createBlog(modalPropss).then((post) => {
                 this.props.getPostDetail(post.id, post)
             })
@@ -38,6 +43,7 @@ class UpdatePost extends Component{
     }
     render(){
         let newPost = ('newPost' in this.props.modal.modalProps) ? true:false
+
         return (<Modal
             className='modal'
             overlayClassName='overlay'
@@ -78,8 +84,6 @@ class UpdatePost extends Component{
                             </label>)}
                         {newPost && (<label>
                             Category:
-
-
                             <select  value={('category' in this.props.modal.modalProps) ? this.props.modal.modalProps['category'] : ''}
                                      onChange={this.handlePostChange.bind(this, "category")}>
                                 ({this.props.category.map((option) => (<option key={"option" + option.name} value={option.name}>{option.name}</option>))})
